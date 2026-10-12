@@ -72,7 +72,12 @@ class FakeOutboxRepository(OutboxRepository):
 
     async def add(self, event_type: str, payload: dict[str, Any]) -> None:
         self.messages.append(
-            OutboxMessage(id=self._next_id, event_type=event_type, payload=payload)
+            OutboxMessage(
+                id=self._next_id,
+                event_type=event_type,
+                payload=payload,
+                trace_id=None,
+            )
         )
         self._next_id += 1
 
@@ -87,7 +92,9 @@ class FakeMessageBroker(MessageBroker):
     def __init__(self) -> None:
         self.sent: list[dict[str, Any]] = []
 
-    async def send(self, payload: dict[str, Any]) -> None:
+    async def send(
+        self, payload: dict[str, Any], headers: dict[str, bytes] | None = None
+    ) -> None:
         self.sent.append(payload)
 
 
