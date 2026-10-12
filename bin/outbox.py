@@ -12,6 +12,7 @@ from src.infrastructure.persistence.database import (
 from src.infrastructure.persistence.uow import SQLAlchemyUnitOfWork
 from src.settings import Settings
 
+
 async def main() -> None:
     configure_logging()
     settings = Settings()
