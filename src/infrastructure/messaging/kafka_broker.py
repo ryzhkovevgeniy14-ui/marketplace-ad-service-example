@@ -11,8 +11,13 @@ class KafkaMessageBroker(MessageBroker):
         self._producer = producer
         self._topic = topic
 
-    async def send(self, payload: dict[str, typing.Any]) -> None:
-        await self._producer.send_and_wait(self._topic, payload)
+    async def send(
+        self, payload: dict[str, typing.Any], headers: dict[str, bytes] | None = None
+    ) -> None:
+        kafka_headers = list(headers.items()) if headers else None
+        await self._producer.send_and_wait(
+            self._topic, value=payload, headers=kafka_headers
+        )
 
 
 def serialize(value: dict[str, typing.Any]) -> bytes:
